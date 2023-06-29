@@ -33,7 +33,7 @@ def addNewUser():
     lastName = request.form['last-name']
     imageUrl = request.form['image-url']
 
-    newUser = User(first_name=firstName, last_name = lastName, image_URL=imageUrl)
+    newUser = User(first_name=firstName, last_name = lastName, image_URL=imageUrl or None)
     db.session.add(newUser)
     db.session.commit()
 
@@ -42,19 +42,19 @@ def addNewUser():
 
 @app.route('/users/<int:user_id>')
 def getUserInfo(user_id):
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     return render_template('userDetails.html',user=user)
 
 
 @app.route('/users/<int:user_id>/edit')
 def showEditUserForm(user_id):
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     return render_template('editUser.html', user=user)
 
 @app.route('/users/<int:user_id>/edit', methods=['POST'])
 def editUserInfo(user_id):
     
-    user=User.query.get(user_id)
+    user=User.query.get_or_404(user_id)
     
     firstName = request.form['first-name']
     lastName = request.form['last-name']

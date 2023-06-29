@@ -6,11 +6,12 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
 
-
+defaultImage = 'https://expertphotography.b-cdn.net/wp-content/uploads/2020/06/stock-photography-trends11.jpg'
 
 """Models for Blogly."""
 
 class User (db.Model):
+    """Site User"""
     __tablename__ = 'users'
 
     id = db.Column(db.Integer,
@@ -24,7 +25,8 @@ class User (db.Model):
                            nullable=False)
     
     image_URL = db.Column(db.Text,
-                           nullable=True)
+                           nullable=True,
+                           default=defaultImage)
     
     @property
     def full_name(self):

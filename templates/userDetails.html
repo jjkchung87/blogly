@@ -2,23 +2,30 @@
 {% block title %} {{user.get_full_name()}} {% endblock %}
 {% block content %}
 
-<h1>User Detail Page</h1><br>
+<h1 class="text-center">User Detail Page</h1><br>
 
-<div class="container">
-    <div class="col col-6">
-        <div class="row">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
             <img src="{{user.image_URL}}" alt="{{user.first_name}} {{user.last_name}}"><br>
-            <h3>{{user.get_full_name()}}</h3>
-            <a href="/users/{{user.id}}/edit">Edit</a>
-            <form action="/users/{{user.id}}/delete" method="post">
-            <button>Delete</button>
-            </form>                  
-        </div>
+        </div>   
+        <div class="col-6">
+            <h3>{{user.get_full_name()}}</h3>            
+            <form>
+                <button class="btn btn-primary btn-sm" formaction="/users/{{ user.id }}/edit" formmethod="GET">
+                    Edit
+                </button>
+                <button class="btn btn-danger btn-sm" formaction="/users/{{ user.id }}/delete" formmethod="POST">
+                    Delete
+                </button>
+            </form>
+            <a href="/users" class="btn btn-outline-secondary btn-sm">Back to List</a>     
+        </div>    
     </div>
-    
+    </div>
 
-    </div>
-</div>
 
 
 {% endblock %}
+
+

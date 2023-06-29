@@ -2,12 +2,12 @@
 {% block title %} New User Form {% endblock %}
 {% block content %}
 
-<h1>Create a User</h1>
+<h1 class="text-center">Create a User</h1>
 <form method="post">
     <input type="text" name="first-name" placeholder="Enter a first name">
     <input type="text" name="last-name" placeholder="Enter a last name">
     <input type="url" name="image-url" placeholder="Provide an image of this user">
-    <button type="submit" href="/users/new">Add</button>
+    <button type="submit" href="/users/new" class="btn btn-primary">Add</button>
 </form>
 
 {% endblock %}
