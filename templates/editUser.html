@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} User Edit Page {% endblock %}
+{% block content %}
+
+<h1>Edit a User</h1>
+<form method="post">
+    <input type="text" name="first-name" placeholder="{{user.first_name}}">
+    <input type="text" name="last-name" placeholder="{{user.last_name}}">
+    <input type="url" name="image-url" placeholder="{{user.image_URL}}">
+    <a href="/users/{{user.id}}">Cancel</a>
+    <button type="submit" href="/users/{{user.id}}/edit">Update</button>
+</form>
+{% endblock %}
