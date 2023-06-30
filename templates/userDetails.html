@@ -20,6 +20,15 @@
                 </button>
             </form>
             <a href="/users" class="btn btn-outline-secondary btn-sm">Back to List</a>     
+        </div>
+        <div class="col-6">
+            <h3>Posts</h3>
+            <ul>
+                {% for post in user.posts %}
+                    <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+                {% endfor %}
+            </ul>
+            <a href="/users/{{user.id}}/posts/new" class="btn btn-primary">Add Post</a>
         </div>    
     </div>
     </div>
