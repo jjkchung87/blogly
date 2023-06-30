@@ -29,7 +29,9 @@ class User (db.Model):
     image_URL = db.Column(db.Text,
                            nullable=True,
                            default=defaultImage)
-    
+
+    posts = db.relationship('Post', backref='user', cascade='all, delete')
+
     def __repr__(self):
         return f"<User {self.id} {self.first_name} {self.last_name} {self.image_URL}>"
 
@@ -64,7 +66,7 @@ class Post (db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    user = db.relationship('User', backref='posts')
+    # user = db.relationship('User', backref='posts', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<Post {self.id} {self.title} {self.content} {self.created_at} {self.user_id}>"
