@@ -4,9 +4,16 @@
 
 <h1 class="text-center">Edit Post</h1>
 <form>
-    <input type="text" name="title" placeholder="{{post.title}}">
-    <input type="text" name="content" placeholder="{{post.content}}">
-    <button formmethod="POST" formaction="/posts/{{post.id}}/edit" class="btn btn-primary">Edit</button>
+    <input type="text" name="title" placeholder="{{post.title}}"><br>
+    <textarea name="content" placeholder="{{post.content}}"></textarea><br>
+    {% for tag in tags %}
+    {% if tag in post.tags %}
+    <input type="checkbox" name="tags" value="{{tag.id}}" checked>{{tag.name}}<br>
+    {% else %}
+    <input type="checkbox" name="tags" value="{{tag.id}}">{{tag.name}}<br>
+    {% endif %}
+    {% endfor %}
+    <button formmethod="POST" formaction="/posts/{{post.id}}/edit" class="btn btn-success">Edit</button>
     <button formaction="/posts/{{post.id}}" formmethod="GET" class="btn btn-outline-secondary"> Cancel </button>
 </form>
 

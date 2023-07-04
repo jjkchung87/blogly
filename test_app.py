@@ -2,7 +2,7 @@ from unittest import TestCase
 
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag
 
 
 # Use test database and don't clutter tests with SQL
@@ -28,15 +28,24 @@ class UserViewsTestCase(TestCase):
         """Add sample user"""
         Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
     
         user = User(first_name='Rory', last_name='Mcilroy', image_URL='https://b.fssta.com/uploads/application/golf/headshots/380.vresize.350.350.medium.79.png')
         self.user = user
+        golf = Tag(name='Golf')
+        self.golf = golf
+        sports = Tag(name='Sports')
+        self.sports = sports
+        tags = [golf, sports]
         post = Post(title='LIV Sucks!', content='You all know the PGA Tour is where it at', user_id=self.user.id )
+        post.tags = tags
         self.post = post
+
         db.session.add_all([user, post])
         db.session.commit()
 
         
+
 
     def tearDown(self):
         """Clean-up fouled transactions"""
@@ -122,7 +131,44 @@ class UserViewsTestCase(TestCase):
             self.assertNotIn('LIV Sucks!',html)
             self.assertIn('<h1 class="text-center">Users</h1>', html)
     
+    def testShowTags(self):
+        with app.test_client() as client:
+            resp = client.get('/tags')
+            html = resp.get_data(as_text=True)
 
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('>Golf</a></li>',html)
+        self.assertIn('>Sports</a></li>',html)
+
+    def testCreateTag(self):
+        with app.test_client() as client:
+            resp = client.post('/tags/new', data={'tag-name':'Tennis'}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('>Tennis</a></li>',html)
+        self.assertIn('>Golf</a></li>',html)
+        self.assertIn('>Sports</a></li>',html)
+
+
+    def testEditTag(self):
+        with app.test_client() as client:
+            resp = client.post(f'/tags/{self.sports.id}/edit', data={'tag-name':'PGA', 'posts':[]}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('>PGA</a></li>', html)
+            self.assertNotIn('LIV Sucks!', html)
+
+
+    def testDeleteTag(self):
+        with app.test_client() as client:
+            resp=client.post(f'/tags/{self.sports.id}/delete',data={}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('>Golf</a></li>', html)
+            self.assertNotIn('Sports', html)
         
 
 

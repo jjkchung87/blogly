@@ -1,11 +1,13 @@
 """Seed file to make sample data for db"""
 
-from models import User, Post, db, defaultImage
+from models import User, Post, db, defaultImage, Tag, PostTag
 from app import app
+from sqlalchemy import text
 
 
 #create all tables
-db. drop_all()
+
+db.drop_all()
 db.create_all()
 
 
@@ -22,10 +24,26 @@ p5 = Post(title="My Favourite Snacks", content="I basically like everything. Woo
 p6 = Post(title="The Master is Rigged!", content="Pretty sure it's rigged. How does Patrick Reed win but not me!?", user_id='3')
 p7 = Post(title="Woof Woof!", content="Woof woof woof!!!", user_id='1')
 
+t1 = Tag(name='Fun')
+t2 = Tag(name='Serious')
+t3 = Tag(name='Golf')
+t4 = Tag(name='Business')
+t5 = Tag(name='Pets')
 
+p1.tags.append(t1)
+p1.tags.append(t5)
+p2.tags.append(t4)
+p3.tags.append(t2)
+p4.tags.append(t4)
+p5.tags.append(t1)
+p5.tags.append(t5)
+p6.tags.append(t3)
+p6.tags.append(t2)
+p7.tags.append(t5)
 
 db.session.add_all([u1,u2,u3,u4])
 db.session.add_all([p1,p2,p3,p4,p5,p6,p7])
+db.session.add_all([t1,t2,t3,t4,t5])
 db.session.commit()
 
 

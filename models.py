@@ -30,7 +30,7 @@ class User (db.Model):
                            nullable=True,
                            default=defaultImage)
 
-    posts = db.relationship('Post', backref='user', cascade='all, delete')
+    posts = db.relationship('Post', backref='user', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<User {self.id} {self.first_name} {self.last_name} {self.image_URL}>"
@@ -66,7 +66,54 @@ class Post (db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    tags = db.relationship('Tag',secondary='posts_tags', backref='posts')
+
+    postTag = db.relationship('PostTag', backref='posts', cascade='all, delete-orphan')
+
+    @property
+    def friendly_date(self):
+        """Return nicely-formatted date."""
+
+        return self.created_at.strftime("%a %b %-d  %Y, %-I:%M %p")
     # user = db.relationship('User', backref='posts', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<Post {self.id} {self.title} {self.content} {self.created_at} {self.user_id}>"
+    
+
+class Tag (db.Model):
+    """Tags"""
+
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    name = db.Column(db.Text,
+                    unique = True )
+    
+    postTag = db.relationship('PostTag', backref='tags',  cascade='all, delete-orphan')
+
+    def __repr__ (self):
+        return f'<Tag {self.id} {self.name}>'
+
+
+class PostTag (db.Model):
+    """Posts and Tags Intersection"""
+
+    __tablename__ = "posts_tags"
+
+    post_id = db.Column(db.Integer,
+                        db.ForeignKey('posts.id', ondelete = 'CASCADE'),
+                        primary_key=True,
+                        nullable=False)
+    
+    tag_id = db.Column(db.Integer,
+                       db.ForeignKey('tags.id', ondelete = 'CASCADE'),
+                       primary_key=True,
+                       nullable=False)
+    
+    __table_args__ = (
+        db.PrimaryKeyConstraint('post_id', 'tag_id'),
+    )
+

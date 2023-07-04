@@ -1,3 +1,7 @@
 img {
     max-width: 500px;
 }
+
+#logo {
+    max-height:30px;
+}

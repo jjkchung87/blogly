@@ -10,7 +10,7 @@
                 {% for post in posts %}
                 <h2 class=""><a href="/posts/{{post.id}}">{{post.title}}</a></h2>
                 <h4 class="">{{post.content}}</h4>
-                <h5 class="">By {{post.user.full_name}} on {{post.created_at}}</h5>
+                <h5 class="">By {{post.user.full_name}} on {{post.friendly_date}}</h5>
                 {% endfor %}
 
             <a href="/users" class="btn btn-outline-secondary">Go to Users</a>
